@@ -37,6 +37,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -50,12 +51,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.LinearLayout;
-import android.os.Build.*;
-import android.provider.MediaStore;
 
 public class DroidGap extends Activity {
 		
-	private static final String LOG_TAG = "DroidGap";
+	public static final String LOG_TAG = "PhoneGap";
 	protected WebView appView;
 	private LinearLayout root;	
 	
@@ -155,7 +154,6 @@ public class DroidGap extends Activity {
     	mKey = new BrowserKey(appView, this);
     	audio = new AudioHandler(appView, this);
     	
-    	// This creates the new javascript interfaces for PhoneGap
     	appView.addJavascriptInterface(gap, "DroidGap");
     	appView.addJavascriptInterface(geo, "Geo");
     	appView.addJavascriptInterface(accel, "Accel");
@@ -167,7 +165,6 @@ public class DroidGap extends Activity {
     	appView.addJavascriptInterface(crypto, "GapCrypto");
     	appView.addJavascriptInterface(mKey, "BackButton");
     	appView.addJavascriptInterface(audio, "GapAudio");
-    	
     	
     	if (android.os.Build.VERSION.RELEASE.startsWith("1."))
     	{
@@ -270,7 +267,6 @@ public class DroidGap extends Activity {
 		public class GapOKDialog implements DialogInterface.OnClickListener {
 
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dialog.dismiss();
 			}			
 		
@@ -279,7 +275,6 @@ public class DroidGap extends Activity {
 		public class GapCancelDialog implements DialogInterface.OnClickListener {
 
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dialog.dismiss();
 			}			
 		
@@ -290,24 +285,22 @@ public class DroidGap extends Activity {
 	
 	public final class EclairClient extends GapClient
 	{		
-		private String TAG = "PhoneGapLog";
 		private long MAX_QUOTA = 100 * 1024 * 1024;
 		
 		public EclairClient(Context ctx) {
 			super(ctx);
-			// TODO Auto-generated constructor stub
 		}
 		
 		public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
 		    	     long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
 		{
-		  Log.d(TAG, "event raised onExceededDatabaseQuota estimatedSize: " + Long.toString(estimatedSize) + " currentQuota: " + Long.toString(currentQuota) + " totalUsedQuota: " + Long.toString(totalUsedQuota));  	
+		  Log.d(LOG_TAG, "event raised onExceededDatabaseQuota estimatedSize: " + Long.toString(estimatedSize) + " currentQuota: " + Long.toString(currentQuota) + " totalUsedQuota: " + Long.toString(totalUsedQuota));  	
 		  
 			if( estimatedSize < MAX_QUOTA)
 		    	{	                                        
 		    	  //increase for 1Mb        		    	  		    	  
 		    		long newQuota = currentQuota + 1024*1024;		    		
-		    		Log.d(TAG, "calling quotaUpdater.updateQuota newQuota: " + Long.toString(newQuota) );  	
+		    		Log.d(LOG_TAG, "calling quotaUpdater.updateQuota newQuota: " + Long.toString(newQuota) );  	
 		    		quotaUpdater.updateQuota(newQuota);
 		    	}
 		    else
@@ -322,11 +315,10 @@ public class DroidGap extends Activity {
 		public void onConsoleMessage(String message, int lineNumber, String sourceID)
 		{       
 			// This is a kludgy hack!!!!
-			Log.d(TAG, sourceID + ": Line " + Integer.toString(lineNumber) + " : " + message);              
+			Log.d(LOG_TAG, sourceID + ": Line " + Integer.toString(lineNumber) + " : " + message);              
 		}
 		
 	}
-	
   
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -334,7 +326,6 @@ public class DroidGap extends Activity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
         	if (mKey.isBound())
         	{
-        		//We fire an event here!
         		appView.loadUrl("javascript:document.keyEvent.backTrigger()");
         	}
         	else
@@ -350,7 +341,6 @@ public class DroidGap extends Activity {
         
         if (keyCode == KeyEvent.KEYCODE_MENU) 
         {
-        	// This is where we launch the menu
         	appView.loadUrl("javascript:keyEvent.menuTrigger()");
         }
                 
@@ -381,6 +371,7 @@ public class DroidGap extends Activity {
     	            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
     	            launcher.processPicture(bitmap);
     	       } catch (Exception e) {
+    	    	   Log.d(DroidGap.LOG_TAG, "onActivityResult failed due to an exception: " + e.getMessage());
     	    	   launcher.failPicture("Did not complete!");
     	       }
     	    }
@@ -394,5 +385,4 @@ public class DroidGap extends Activity {
     {
       return this.appView;
     }
-      
 }

@@ -33,7 +33,7 @@ public class DirectoryManager {
 				long blockSize = stat.getBlockSize();
 				long availableBlocks = stat.getAvailableBlocks();
 				freeSpace = availableBlocks*blockSize/1024;
-			} catch (Exception e) {e.printStackTrace(); }
+			} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "getFreeDiskSpace failed due to an exception: " + e.getMessage()); }
 		} else { return -1; }
 		return (freeSpace);
 	}	
@@ -78,10 +78,10 @@ public class DirectoryManager {
 						deletedFile.delete();
 					}
 					newPath.delete();
-					Log.i("DirectoryManager deleteDirectory", fileName);
+					Log.i(DroidGap.LOG_TAG, "DirectoryManager deleteDirectory: " +  fileName);
 					status = true;
 				}catch (Exception e){
-					e.printStackTrace();
+					Log.d(DroidGap.LOG_TAG, "deleteDirectory failed due to an exception: " + e.getMessage());
 					status = false;
 				}
 				
@@ -103,11 +103,11 @@ public class DirectoryManager {
 			checker.checkDelete(newPath.toString());
 			if (newPath.isFile()){
 				try {
-					Log.i("DirectoryManager deleteFile", fileName);
+					Log.i(DroidGap.LOG_TAG, "DirectoryManager deleteFile: " + fileName);
 					newPath.delete();
 					status = true;
 				}catch (SecurityException se){
-					se.printStackTrace();
+					Log.d(DroidGap.LOG_TAG, "deleteFile failed due to an exception: " + se.getMessage());
 					status = false;
 				}
 			}else

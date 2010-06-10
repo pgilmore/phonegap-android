@@ -1,14 +1,13 @@
 package com.phonegap;
 
+import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
 import android.util.Log;
 import android.webkit.WebView;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.net.Uri;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 
 @SuppressWarnings("deprecation")
 public class ContactManager {
@@ -20,7 +19,6 @@ public class ContactManager {
 		public String phone = "";
 	}
 	
-	private static final String LOG_TAG = "Contact Query";
 	Activity mApp;
 	WebView mView;
 	Uri mPeople = android.provider.Contacts.People.CONTENT_URI;
@@ -37,11 +35,11 @@ public class ContactManager {
 	public void getContactsAndSendBack()
 	{
 		String[] projection = new String[] {
-				People._ID,
-				People.NAME,
-				People.NUMBER,
-				People.PRIMARY_EMAIL_ID
-			};
+												People._ID,
+												People.NAME,
+												People.NUMBER,
+												People.PRIMARY_EMAIL_ID
+											};
 
 		try{
 			Cursor myCursor = mApp.managedQuery(mPeople, projection, 
@@ -50,7 +48,7 @@ public class ContactManager {
 		}
 		catch (SQLiteException ex)
 		{
-			Log.d(LOG_TAG, ex.getMessage());
+			Log.d(DroidGap.LOG_TAG, "getContactsAndSendBack failed due to an exception: " + ex.getMessage());
 		}		
 	}
 	
@@ -83,7 +81,7 @@ public class ContactManager {
 		}
 		catch (SQLiteException ex)
 		{
-			Log.d(LOG_TAG, ex.getMessage());
+			Log.d(DroidGap.LOG_TAG, "searchByEmail failed due to an exception: " + ex.getMessage());
 		}
 				
 	}
@@ -131,7 +129,7 @@ public class ContactManager {
 			}
 			catch (SQLiteException ex)
 			{
-					Log.d(LOG_TAG, ex.getMessage());
+				Log.d(DroidGap.LOG_TAG, "searchPeople failed due to an exception: " + ex.getMessage());
 			}		
 	
 	}
@@ -226,7 +224,7 @@ public class ContactManager {
 		}
 		catch (SQLiteException ex)
 		{
-			Log.d(LOG_TAG, ex.getMessage());
+			Log.d(DroidGap.LOG_TAG, "getContactData failed due to an exception: " + ex.getMessage());
 		}		
 		
 		return data;
@@ -281,7 +279,7 @@ public class ContactManager {
 		}
 		catch (SQLiteException ex)
 		{
-			Log.d(LOG_TAG, ex.getMessage());
+			Log.d(DroidGap.LOG_TAG, "getEmail failed due to an exception: " + ex.getMessage());
 		}
 		
 		return email;		

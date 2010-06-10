@@ -5,6 +5,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.Context;
 import android.net.*;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class NetworkManager {
@@ -50,6 +51,7 @@ public class NetworkManager {
 			HttpGet httpget = new HttpGet(uri);
 			httpclient.execute(httpget);			
 		} catch (Exception e) { 
+			Log.d(DroidGap.LOG_TAG, "isReachable failed due to an exception: " + e.getMessage());
 			reached = false;
 		}
 		return reached;

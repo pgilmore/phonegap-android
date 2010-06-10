@@ -1,6 +1,5 @@
 package com.phonegap;
 
-import java.io.EOFException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -9,6 +8,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 public class HttpHandler {
 
 	protected Boolean get(String url, String file)
@@ -16,10 +17,10 @@ public class HttpHandler {
 		HttpEntity entity = getHttpEntity(url);
 		try {
 			writeToDisk(entity, file);
-		} catch (Exception e) { e.printStackTrace(); return false; }
+		} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "get failed due to an exception: " + e.getMessage()); return false; }
 		try {
 			entity.consumeContent();
-		} catch (Exception e) { e.printStackTrace(); return false; }
+		} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "get failed due to an exception: " + e.getMessage()); return false; }
 		return true;
 	}
 	
@@ -34,11 +35,11 @@ public class HttpHandler {
 			HttpGet httpget = new HttpGet(url);
 			HttpResponse response = httpclient.execute(httpget);
 			entity = response.getEntity();
-		} catch (Exception e) { e.printStackTrace(); return null; }
+		} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "getHttpEntity failed due to an exception: " + e.getMessage()); return null; }
 		return entity;
 	}
 	
-	private void writeToDisk(HttpEntity entity, String file) throws EOFException
+	private void writeToDisk(HttpEntity entity, String file)
 	/**
 	 * writes a HTTP entity to the specified filename and location on disk
 	 */
@@ -60,6 +61,6 @@ public class HttpHandler {
 			} while (true);
 			out.flush();
 			out.close();	
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "writeToDisk failed due to an exception: " + e.getMessage()); }
 	}
 }

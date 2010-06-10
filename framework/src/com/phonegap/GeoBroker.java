@@ -43,6 +43,6 @@ public class GeoBroker {
 	
 	public void stop(String key)
 	{
-		GeoListener geo = geoListeners.get(key);
+		geoListeners.remove(key);
 	}
 }

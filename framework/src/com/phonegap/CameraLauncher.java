@@ -6,6 +6,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.util.Log;
 import android.webkit.WebView;
 
 
@@ -42,6 +43,7 @@ public class CameraLauncher {
 		}
 		catch(Exception e)
 		{
+			Log.d(DroidGap.LOG_TAG, "processPicture failed due to an exception: " + e.getMessage());
 			failPicture("fail");
 		}
 				
@@ -49,7 +51,7 @@ public class CameraLauncher {
 	
 	public void failPicture(String err)
 	{
+		Log.d(DroidGap.LOG_TAG, "failPicture due to an error: " + err);
 		mAppView.loadUrl("javascript:navigator.camera.fail('" + err + "');");
 	}
-	
 }

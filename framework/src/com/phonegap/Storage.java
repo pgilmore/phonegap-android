@@ -8,7 +8,6 @@ import android.webkit.WebView;
 
 public class Storage {
 	
-	private static final String LOG_TAG = "SQLite Storage:";
 	SQLiteDatabase myDb;
 	String path;
 	String txid = "";
@@ -43,7 +42,7 @@ public class Storage {
 			}
 			catch (SQLiteException ex)
 			{
-				Log.d(LOG_TAG, ex.getMessage());	
+				Log.d(DroidGap.LOG_TAG, "executeSql failed due to an exception: " + ex.getMessage());	
 				txid = "";
 				appView.loadUrl("droiddb.fail(" + ex.getMessage() + "," +  txid + ")");			
 			}

@@ -16,12 +16,14 @@ import javax.crypto.spec.SecretKeySpec;
 public class SimpleCrypto {
 	
 	public static String encrypt(String seed, String cleartext) throws Exception {
+		//TODO: Manage Exceptions a bit better
 		byte[] rawKey = getRawKey(seed.getBytes());
 		byte[] result = encrypt(rawKey, cleartext.getBytes());
 		return toHex(result);
 	}
 	
 	public static String decrypt(String seed, String encrypted) throws Exception {
+		//TODO: Manage Exceptions a bit better
 		byte [] rawKey = getRawKey(seed.getBytes());
 		byte [] enc = toByte(encrypted);
 		byte [] result = decrypt(rawKey, enc);
@@ -29,6 +31,7 @@ public class SimpleCrypto {
 	}
 	
 	public static byte[] getRawKey(byte [] seed) throws Exception {
+		//TODO: Manage Exceptions a bit better
 		KeyGenerator kgen = KeyGenerator.getInstance("AES");
 		SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
 		sr.setSeed(seed);
@@ -39,6 +42,7 @@ public class SimpleCrypto {
 	}
 	
 	private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
+		//TODO: Manage Exceptions a bit better
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance("AES");
 		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
@@ -47,6 +51,7 @@ public class SimpleCrypto {
 	}
 	
 	private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
+		//TODO: Manage Exceptions a bit better
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance("AES");
 		cipher.init(Cipher.DECRYPT_MODE, skeySpec);

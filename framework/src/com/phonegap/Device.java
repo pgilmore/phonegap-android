@@ -34,8 +34,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 
 public class Device{
-	
-	private static final String LOG_TAG = "PhoneGap";
 	/*
 	 * UUID, version and availability	
 	 */
@@ -44,12 +42,10 @@ public class Device{
 	public static String platform = "Android";
 	public static String uuid;
 	private Context mCtx;
-    private WebView mAppView;
     AudioPlayer audio; 
     
 	public Device(WebView appView, Context ctx) {
         this.mCtx = ctx;
-        this.mAppView = appView;
         uuid = getUuid();
     }
 	
@@ -73,13 +69,14 @@ public class Device{
 	
 	public String getPlatform()
 	{
-		return this.platform;
+		return Device.platform;
 	}
 	
 	public String getUuid()
 	{		
 		//TelephonyManager operator = (TelephonyManager) mCtx.getSystemService(Context.TELEPHONY_SERVICE);		
 		//String uuid = operator.getDeviceId();
+		//TODO: Figure out why this is done in this way?
 		String uuid = Settings.Secure.getString(mCtx.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 		return uuid;
 	}

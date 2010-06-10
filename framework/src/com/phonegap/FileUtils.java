@@ -2,6 +2,7 @@ package com.phonegap;
 
 import java.io.*;
 
+import android.util.Log;
 import android.webkit.WebView;
 
 public class FileUtils {
@@ -82,7 +83,6 @@ public class FileUtils {
     public String read(String filename)
     {
     	String data = "";
-    	String output = "";
     	try {
     		FileInputStream fstream = new FileInputStream(filename);
 			DataInputStream in = new DataInputStream(fstream);
@@ -92,8 +92,10 @@ public class FileUtils {
 				}
 			  
 		} catch (FileNotFoundException e) {
+			Log.d(DroidGap.LOG_TAG, "read failed due to an exception: " + e.getMessage());
 			data = "FAIL: File not found";
 		} catch (IOException e) {
+			Log.d(DroidGap.LOG_TAG, "read failed due to an exception: " + e.getMessage());
 			data = "FAIL: IO ERROR";		
 		}
 		
@@ -113,14 +115,10 @@ public class FileUtils {
     			out.write(buff, 0, rawData.length);
     			out.flush();
     			out.close();    			
-    			//mView.loadUrl("javascript:navigator.FileReader.onsuccess('File written')");
     		} catch (Exception e) { 
-    			//mView.loadUrl("javascript:navigator.FileReader.onerror('Fail')");
-    			// So, do we just return -1 at this point!
+    			Log.d(DroidGap.LOG_TAG, "write failed due to an exception: " + e.getMessage());
     			return -1;
     		}
 		return 0;
     }
-    
-
 }

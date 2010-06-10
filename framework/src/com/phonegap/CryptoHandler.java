@@ -1,5 +1,6 @@
 package com.phonegap;
 
+import android.util.Log;
 import android.webkit.WebView;
 
 public class CryptoHandler {
@@ -15,10 +16,9 @@ public class CryptoHandler {
 	{
 		try {
 			String encrypted = SimpleCrypto.encrypt(pass,text);
-			mView.loadUrl("javascript:Crypto.gotCryptedString('" + text + "')");
+			mView.loadUrl("javascript:Crypto.gotCryptedString('" + encrypted + "')");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d(DroidGap.LOG_TAG, "encrypt failed due to an exception: " + e.getMessage());
 		}
 		
 	}
@@ -27,11 +27,9 @@ public class CryptoHandler {
 	{
 		try {
 			String decrypted = SimpleCrypto.decrypt(pass,text);
-			mView.loadUrl("javascript:Crypto.gotPlainString('" + text + "')");
+			mView.loadUrl("javascript:Crypto.gotPlainString('" + decrypted + "')");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.d(DroidGap.LOG_TAG, "decrypt failed due to an exception: " + e.getMessage());
 		}
 	}
-	
 }

@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.content.Context;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class AccelListener implements SensorEventListener{
@@ -44,6 +45,7 @@ public class AccelListener implements SensorEventListener{
 		}
 		else
 		{
+			Log.d(DroidGap.LOG_TAG, "Failed to start the accelerometer");
 			mAppView.loadUrl("javascript:navigator.accelerometer.epicFail(" + mKey + ", 'Failed to start')");
 		}
 	}
@@ -58,7 +60,6 @@ public class AccelListener implements SensorEventListener{
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void onSensorChanged(SensorEvent event) {		
@@ -71,7 +72,6 @@ public class AccelListener implements SensorEventListener{
 			float x = event.values[0];
 			float y = event.values[1];
 			float z = event.values[2];			
-			//mAppView.loadUrl("javascript:gotAccel(" + x +  ", " + y + "," + z + " )");
 			mAppView.loadUrl("javascript:navigator.accelerometer.gotAccel(" +  mKey + "," + x + "," + y + "," + z + ")");
 		}		
 	}

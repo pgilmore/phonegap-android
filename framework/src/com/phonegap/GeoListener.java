@@ -38,7 +38,6 @@ public class GeoListener {
 		/*
 		 * We only need to figure out what we do when we succeed!
 		 */
-		
 		String params; 
 		/*
 		 * Build the giant string to send back to Javascript!

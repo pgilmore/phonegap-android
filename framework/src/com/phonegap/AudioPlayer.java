@@ -38,11 +38,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 			try {
 				recorder.prepare();
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.d(DroidGap.LOG_TAG, "startRecording failed due to an exception: " + e.getMessage());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.d(DroidGap.LOG_TAG, "startRecording failed due to an exception: " + e.getMessage());
 			}
 			isRecording = true;
 			recorder.start();
@@ -67,7 +65,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.d(DroidGap.LOG_TAG, "stopRecording failed due to an exception: " + e.getMessage());
 		}
 	}	
 	
@@ -93,7 +91,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 				mPlayer.setOnPreparedListener(this);
 			} catch (Exception e) 
 			{ 
-				e.printStackTrace(); 
+				Log.d(DroidGap.LOG_TAG, "startPlaying failed due to an exception: " + e.getMessage());
 			}
 		}
 	} 
@@ -137,7 +135,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 				mPlayer.prepare();
 				duration = mPlayer.getDuration();
 				mPlayer.release();
-			} catch (Exception e) { e.printStackTrace(); return(-3); }
+			} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "getDuration failed due to an exception: " + e.getMessage()); return(-3); }
 		} else
 		if (isPlaying & !isStreaming(file)) {
 			duration = mPlayer.getDuration();
@@ -145,7 +143,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 		if (isPlaying & isStreaming(file)) {
 			try {
 				duration = mPlayer.getDuration();
-			} catch (Exception e) { e.printStackTrace(); return(-4); }
+			} catch (Exception e) { Log.d(DroidGap.LOG_TAG, "getDuration failed due to an exception: " + e.getMessage()); return(-4); }
 		}else { return -1; }
 		return duration;
 	}
@@ -158,7 +156,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 				public void onBufferingUpdate(MediaPlayer mPlayer, int percent)
 				{
 					/* TODO: call back, e.g. update outer progress bar */
-					Log.d("AudioOnBufferingUpdate", "percent: " + percent); 
+					Log.d(DroidGap.LOG_TAG, "onPrepared percent: " + percent); 
 				}
 			});
 			mPlayer.start();
@@ -166,7 +164,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 	}
 
 	public boolean onError(MediaPlayer mPlayer, int arg1, int arg2) {
-		Log.e("AUDIO onError", "error " + arg1 + " " + arg2);
+		Log.e(DroidGap.LOG_TAG, "onError error " + arg1 + " " + arg2);
 		return false;
 	}
 	
@@ -178,7 +176,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 		else if (output == (1)){
 			audiMgr.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL);
 		}else
-			Log.e("AudioHandler setAudioOutputDevice", " unknown output device");	
+			Log.e(DroidGap.LOG_TAG, "setAudioOutputDevice unknown output device");	
 	}
 	
 	protected int getAudioOutputDevice(){

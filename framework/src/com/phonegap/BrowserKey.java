@@ -1,16 +1,11 @@
 package com.phonegap;
 
-import android.app.Activity;
 import android.util.Log;
 import android.webkit.WebView;
 
 /*
  * This class literally exists to protect DroidGap from Javascript directly.
- * 
- * 
  */
-
-
 public class BrowserKey {
 
 	DroidGap mAction;
@@ -25,7 +20,7 @@ public class BrowserKey {
 	
 	public void override()
 	{
-		Log.d("PhoneGap", "WARNING: Back Button Default Behaviour will be overridden.  The backKeyDown event will be fired!");
+		Log.d(DroidGap.LOG_TAG, "WARNING: Back Button Default Behaviour will be overridden.  The backKeyDown event will be fired!");
 		bound = true;
 	}
 	

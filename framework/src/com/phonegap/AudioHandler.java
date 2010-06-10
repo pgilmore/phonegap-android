@@ -1,6 +1,7 @@
 package com.phonegap;
 
 import android.content.Context;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class AudioHandler {
@@ -54,7 +55,7 @@ public class AudioHandler {
     
     public long getDurationAudio(String file)
     {
-    	System.out.println(audio.getDuration(file));
+    	Log.d(DroidGap.LOG_TAG,"Audio file duration: " + audio.getDuration(file));
     	return(audio.getDuration(file));
     }  
     
