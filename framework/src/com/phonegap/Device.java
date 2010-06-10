@@ -23,15 +23,20 @@ package com.phonegap;
  */
 
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.webkit.WebView;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 
 public class Device{
 	/*
@@ -42,21 +47,65 @@ public class Device{
 	public static String platform = "Android";
 	public static String uuid;
 	private Context mCtx;
-    AudioPlayer audio; 
+    private int notificationResource = -1;
     
 	public Device(WebView appView, Context ctx) {
         this.mCtx = ctx;
         uuid = getUuid();
     }
 	
-	public void beep(long pattern)
+	public void beep(final long pattern)
 	{
-		Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		Ringtone notification = RingtoneManager.getRingtone(mCtx, ringtone);
-		for (long i = 0; i < pattern; ++i)
-		{
-			notification.play();
-		}
+		new Thread () {
+			public void run() {
+				ExecutorService executor = Executors.newCachedThreadPool();
+		        Future<?> future = executor.submit(
+		            new Runnable() {
+		                public void run() {
+		                    try {
+		                        Thread.sleep(pattern);
+		                    } catch (InterruptedException e) {
+		                        Log.d(DroidGap.LOG_TAG, "beep failed with an exception: " + e.getMessage());
+		                    }
+		                }
+		            }
+		        );
+
+		        MediaPlayer notification = null;
+		        if(notificationResource > -1) {
+		        	notification = MediaPlayer.create(mCtx, notificationResource);
+		        }
+		        else {
+		        	Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		        	notification = MediaPlayer.create(mCtx, ringtone);
+		        }
+				
+				if(notification == null) {
+					Log.d(DroidGap.LOG_TAG, "beep failed to find the default notification sound!");
+					return;
+				}
+				notification.setLooping(true);
+				notification.start();
+		    
+		        Log.d(DroidGap.LOG_TAG, "Waiting for beep task to finish..");
+		        try {
+					future.get();
+				} catch (InterruptedException e) {
+					Log.d(DroidGap.LOG_TAG, "beep failed with an exception: " + e.getMessage());
+				} catch (ExecutionException e) {
+					Log.d(DroidGap.LOG_TAG, "beep failed with an exception: " + e.getMessage());
+				} finally {
+					notification.stop();
+				}
+		        Log.d(DroidGap.LOG_TAG, "Beep task finished!");
+		        executor.shutdown();
+			};
+		}.start();
+	}
+	
+	public void setNotificationResource(int notificationResource) {
+		Log.d(DroidGap.LOG_TAG,"Setting beeper resource to int: " + notificationResource);
+		this.notificationResource = notificationResource;
 	}
 	
 	public void vibrate(long pattern){

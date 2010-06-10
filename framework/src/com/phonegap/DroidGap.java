@@ -383,6 +383,10 @@ public class DroidGap extends Activity {
 
     public WebView getView()
     {
-      return this.appView;
+    	return this.appView;
+    }
+    
+    public void setBeepResource(int notificationResource) {
+    	this.gap.setNotificationResource(notificationResource);
     }
 }
